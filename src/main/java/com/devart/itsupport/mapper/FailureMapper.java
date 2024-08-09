@@ -4,8 +4,8 @@ import com.devart.itsupport.dto.FailureDTO;
 import com.devart.itsupport.model.Failure;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {FailureHistoryMapper.class, TicketMapper.class})
+@Mapper(componentModel = "spring")
 public interface FailureMapper {
     FailureDTO toDTO(Failure failure);
-    Failure toEntity(FailureDTO failureDTO);
+    Failure toEntity(FailureDTO dto);
 }

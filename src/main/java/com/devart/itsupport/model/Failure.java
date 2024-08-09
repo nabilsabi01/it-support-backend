@@ -1,6 +1,6 @@
 package com.devart.itsupport.model;
 
-import com.devart.itsupport.model.FailureHistory;
+import com.devart.itsupport.enums.FailureType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +22,9 @@ public class Failure {
     private Long id;
 
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    private FailureType type;
 
     @OneToMany(mappedBy = "failure")
     private List<FailureHistory> failureHistories;

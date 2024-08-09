@@ -34,7 +34,7 @@ public class EquipmentService {
                 .orElseThrow(() -> new EquipmentNotFoundException("Equipment not found with id: " + id));
         equipment.setName(equipmentDTO.getName());
         equipment.setStatus(equipmentDTO.getStatus());
-        equipment.setUser(equipmentMapper.toEntity(equipmentDTO.getUser()).getUser());
+        equipment.setUser(equipmentMapper.toEntity(equipmentDTO).getUser());
         Equipment updatedEquipment = equipmentRepository.save(equipment);
         return equipmentMapper.toDTO(updatedEquipment);
     }
@@ -50,11 +50,11 @@ public class EquipmentService {
                 .collect(Collectors.toList());
     }
 
-    public List<EquipmentDTO> getEquipmentsByUser(UserDTO userDTO) {
-        User user = equipmentMapper.toEntity(userDTO).getUser();
-        List<Equipment> equipments = equipmentRepository.findAllByUser(user);
-        return equipments.stream()
-                .map(equipmentMapper::toDTO)
-                .collect(Collectors.toList());
-    }
+//    public List<EquipmentDTO> getEquipmentsByUser(UserDTO userDTO) {
+//        User user = equipmentMapper.toEntity(userDTO);
+//        List<Equipment> equipments = equipmentRepository.findAllByUser(user);
+//        return equipments.stream()
+//                .map(equipmentMapper::toDTO)
+//                .collect(Collectors.toList());
+//    }
 }

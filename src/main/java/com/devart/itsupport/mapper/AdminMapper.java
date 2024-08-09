@@ -6,6 +6,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface AdminMapper {
-    AdminDTO toDto(Admin admin);
-    Admin toEntity(AdminDTO adminDTO);
+    AdminDTO toDTO(Admin admin);
+    Admin toEntity(AdminDTO dto);
 }

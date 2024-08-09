@@ -27,32 +27,32 @@ public class EquipmentController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<EquipmentDTO> updateEquipment(@PathVariable Long id, @RequestBody EquipmentDTO equipmentDTO) {
         EquipmentDTO updatedEquipment = equipmentService.updateEquipment(id, equipmentDTO);
         return ResponseEntity.ok(updatedEquipment);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteEquipment(@PathVariable Long id) {
         equipmentService.deleteEquipment(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TECHNICIAN', 'ROLE_USER')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TECHNICIAN', 'ROLE_USER')")
     public ResponseEntity<List<EquipmentDTO>> getAllEquipments() {
         List<EquipmentDTO> equipments = equipmentService.getAllEquipments();
         return ResponseEntity.ok(equipments);
     }
 
-    @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<List<EquipmentDTO>> getEquipmentsByUser(@PathVariable Long userId) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(userId);
-        List<EquipmentDTO> equipments = equipmentService.getEquipmentsByUser(userDTO);
-        return ResponseEntity.ok(equipments);
-    }
+//    @GetMapping("/user/{userId}")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public ResponseEntity<List<EquipmentDTO>> getEquipmentsByUser(@PathVariable Long userId) {
+//        UserDTO userDTO = new UserDTO();
+//        userDTO.setId(userId);
+//        List<EquipmentDTO> equipments = equipmentService.getEquipmentsByUser(userDTO);
+//        return ResponseEntity.ok(equipments);
+//    }
 }
