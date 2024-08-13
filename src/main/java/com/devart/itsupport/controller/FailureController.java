@@ -19,28 +19,28 @@ public class FailureController {
     }
 
     @PostMapping
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<FailureDTO> createFailure(@RequestBody FailureDTO failureDTO) {
         FailureDTO createdFailure = failureService.createFailure(failureDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdFailure);
     }
 
     @PutMapping("/{id}")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<FailureDTO> updateFailure(@PathVariable Long id, @RequestBody FailureDTO failureDTO) {
         FailureDTO updatedFailure = failureService.updateFailure(id, failureDTO);
         return ResponseEntity.ok(updatedFailure);
     }
 
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteFailure(@PathVariable Long id) {
         failureService.deleteFailure(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<FailureDTO>> getAllFailures() {
         List<FailureDTO> failures = failureService.getAllFailures();
         return ResponseEntity.ok(failures);

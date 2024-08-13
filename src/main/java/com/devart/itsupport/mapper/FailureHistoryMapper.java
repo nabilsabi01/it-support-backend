@@ -5,13 +5,14 @@ import com.devart.itsupport.model.FailureHistory;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {EquipmentMapper.class, FailureMapper.class})
 public interface FailureHistoryMapper {
     @Mapping(target = "equipmentId", source = "equipment.id")
     @Mapping(target = "failureId", source = "failure.id")
     FailureHistoryDTO toDTO(FailureHistory failureHistory);
 
-    @Mapping(target = "equipment.id", source = "equipmentId")
-    @Mapping(target = "failure.id", source = "failureId")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "equipment", ignore = true)
+    @Mapping(target = "failure", ignore = true)
     FailureHistory toEntity(FailureHistoryDTO dto);
 }

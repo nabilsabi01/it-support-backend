@@ -5,18 +5,18 @@ import com.devart.itsupport.model.Ticket;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {UserMapper.class, EquipmentMapper.class, TechnicianMapper.class})
 public interface TicketMapper {
-
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "equipmentId", source = "equipment.id")
     @Mapping(target = "failureId", source = "failure.id")
     @Mapping(target = "technicianId", source = "technician.id")
     TicketDTO toDTO(Ticket ticket);
 
-    @Mapping(target = "user.id", source = "userId")
-    @Mapping(target = "equipment.id", source = "equipmentId")
-    @Mapping(target = "failure.id", source = "failureId")
-    @Mapping(target = "technician.id", source = "technicianId")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "equipment", ignore = true)
+    @Mapping(target = "failure", ignore = true)
+    @Mapping(target = "technician", ignore = true)
     Ticket toEntity(TicketDTO dto);
 }
