@@ -2,40 +2,43 @@ package com.devart.itsupport.controller;
 
 import com.devart.itsupport.dto.PersonDTO;
 import com.devart.itsupport.service.AccountService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RestController
 @RequestMapping("/api/accounts")
-@RequiredArgsConstructor
 public class AccountController {
 
     private final AccountService accountService;
 
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
+
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PersonDTO>> getAllAccounts() {
-        return ResponseEntity.ok(accountService.getAllAccounts());
+        List<PersonDTO> accounts = accountService.getAllAccounts();
+        return ResponseEntity.ok(accounts);
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PersonDTO> createAccount(@RequestBody PersonDTO personDTO) {
-        return ResponseEntity.ok(accountService.createAccount(personDTO));
+        PersonDTO createdAccount = accountService.createAccount(personDTO);
+        return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PersonDTO> updateAccount(@PathVariable Long id, @RequestBody PersonDTO personDTO) {
-        return ResponseEntity.ok(accountService.updateAccount(id, personDTO));
+        PersonDTO updatedAccount = accountService.updateAccount(id, personDTO);
+        return ResponseEntity.ok(updatedAccount);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
         accountService.deleteAccount(id);
         return ResponseEntity.noContent().build();

@@ -1,12 +1,8 @@
 package com.devart.itsupport.service;
 
-import com.devart.itsupport.dto.AdminDTO;
 import com.devart.itsupport.dto.PersonDTO;
-import com.devart.itsupport.dto.TechnicianDTO;
-import com.devart.itsupport.dto.UserDTO;
-import com.devart.itsupport.mapper.AdminMapper;
-import com.devart.itsupport.mapper.TechnicianMapper;
-import com.devart.itsupport.mapper.UserMapper;
+import com.devart.itsupport.exeption.ResourceNotFoundException;
+import com.devart.itsupport.mapper.PersonMapper;
 import com.devart.itsupport.model.Admin;
 import com.devart.itsupport.model.Person;
 import com.devart.itsupport.model.Technician;
@@ -16,58 +12,58 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
 
     private final PersonRepository personRepository;
-    private final AdminMapper adminMapper;
-    private final TechnicianMapper technicianMapper;
-    private final UserMapper userMapper;
+    private final PersonMapper personMapper;
     private final PasswordEncoder passwordEncoder;
 
     public List<PersonDTO> getAllAccounts() {
-        return personRepository.findAll().stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
+        List<Person> persons = personRepository.findAll();
+        List<PersonDTO> personDTOs = new ArrayList<>();
+        for (Person person : persons) {
+            personDTOs.add(personMapper.toDTO(person));
+        }
+        return personDTOs;
     }
 
     public PersonDTO createAccount(PersonDTO personDTO) {
         Person person = mapToEntity(personDTO);
         person.setPassword(passwordEncoder.encode(personDTO.getPassword()));
         Person savedPerson = personRepository.save(person);
-        return mapToDTO(savedPerson);
+        return personMapper.toDTO(savedPerson);
     }
 
     public PersonDTO updateAccount(Long id, PersonDTO personDTO) {
         Person person = personRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found with id: " + id));
         updatePersonFromDTO(person, personDTO);
         Person updatedPerson = personRepository.save(person);
-        return mapToDTO(updatedPerson);
+        return personMapper.toDTO(updatedPerson);
     }
 
     public void deleteAccount(Long id) {
+        if (!personRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Account not found with id: " + id);
+        }
         personRepository.deleteById(id);
     }
 
-    private PersonDTO mapToDTO(Person person) {
-        return switch (person.getRole()) {
-            case ADMIN -> adminMapper.toDTO((Admin) person);
-            case TECHNICIAN -> technicianMapper.toDTO((Technician) person);
-            case USER -> userMapper.toDTO((User) person);
-        };
-    }
-
     private Person mapToEntity(PersonDTO personDTO) {
-        return switch (personDTO.getRole()) {
-            case ADMIN -> adminMapper.toEntity((AdminDTO) personDTO);
-            case TECHNICIAN -> technicianMapper.toEntity((TechnicianDTO) personDTO);
-            case USER -> userMapper.toEntity((UserDTO) personDTO);
+        Person person = switch (personDTO.getRole()) {
+            case ADMIN -> new Admin();
+            case TECHNICIAN -> new Technician();
+            case USER -> new User();
         };
+        person.setName(personDTO.getName());
+        person.setEmail(personDTO.getEmail());
+        person.setRole(personDTO.getRole());
+        return person;
     }
 
     private void updatePersonFromDTO(Person person, PersonDTO personDTO) {
@@ -76,6 +72,5 @@ public class AccountService {
         if (personDTO.getPassword() != null && !personDTO.getPassword().isEmpty()) {
             person.setPassword(passwordEncoder.encode(personDTO.getPassword()));
         }
-        person.setRole(personDTO.getRole());
     }
 }
