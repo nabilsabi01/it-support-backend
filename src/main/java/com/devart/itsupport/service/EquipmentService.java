@@ -9,13 +9,11 @@ import com.devart.itsupport.model.User;
 import com.devart.itsupport.repository.EquipmentRepository;
 import com.devart.itsupport.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class EquipmentService {
     private final EquipmentRepository equipmentRepository;
     private final UserRepository userRepository;
@@ -71,14 +69,14 @@ public class EquipmentService {
         return equipmentDTOs;
     }
 
-    public List<EquipmentDTO> getEquipmentByUserRole(String role) {
-        List<Equipment> equipments = equipmentRepository.findByUserRole(role);
-        List<EquipmentDTO> equipmentDTOs = new ArrayList<>();
-        for (Equipment equipment : equipments) {
-            equipmentDTOs.add(equipmentMapper.toDTO(equipment));
-        }
-        return equipmentDTOs;
-    }
+//    public List<EquipmentDTO> getEquipmentByUserRole(String role) {
+//        List<Equipment> equipments = equipmentRepository.findByUserRole(role);
+//        List<EquipmentDTO> equipmentDTOs = new ArrayList<>();
+//        for (Equipment equipment : equipments) {
+//            equipmentDTOs.add(equipmentMapper.toDTO(equipment));
+//        }
+//        return equipmentDTOs;
+//    }
 
     public EquipmentDTO updateEquipment(Long id, EquipmentDTO equipmentDTO) {
         Equipment equipment = equipmentRepository.findById(id)

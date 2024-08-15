@@ -7,13 +7,11 @@ import com.devart.itsupport.mapper.FailureMapper;
 import com.devart.itsupport.model.Failure;
 import com.devart.itsupport.repository.FailureRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class FailureService {
     private final FailureRepository failureRepository;
     private final FailureMapper failureMapper;

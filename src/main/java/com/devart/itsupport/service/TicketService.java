@@ -11,13 +11,11 @@ import com.devart.itsupport.repository.TicketRepository;
 import com.devart.itsupport.repository.TechnicianRepository;
 import com.devart.itsupport.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class TicketService {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
@@ -99,7 +97,6 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + id));
         ticket.setDescription(ticketDTO.getDescription());
-        // Update other fields as necessary
         Ticket updatedTicket = ticketRepository.save(ticket);
         return ticketMapper.toDTO(updatedTicket);
     }
